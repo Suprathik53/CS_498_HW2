@@ -1,0 +1,7 @@
+(/register, us-central1): 73.58 ms
+
+(/register, europe-west1): 477.60 ms
+
+(/list, us-central1): 64.38 ms
+
+(/list, europe-west1): 312.87 ms
