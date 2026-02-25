@@ -1,3 +1,5 @@
+Latency:
+
 (/register, us-central1): 73.58 ms
 
 (/register, europe-west1): 477.60 ms
@@ -5,3 +7,13 @@
 (/list, us-central1): 64.38 ms
 
 (/list, europe-west1): 312.87 ms
+
+Eventual Consistency: 
+
+The username was not found in the list 0 times immediately after registration. 0/100 cases resulted in a miss. 
+
+Discussion of Findings: 
+
+  From the results of the average latency tests, we can see that the first instance in the us-central1 region consistently had a lower latency than the second instance in the europe-west1 region for both the /register and /list endpoints. I believe the main reason for this comes down to how network routing is affected by geographic distance. Since the Firestore database was also created in the us-central1 region, the first instance’s latency benefits from the few network hops needed to exchange data due to its close proximity to the database. On the other hand, the second instance needs to communicate across distant regions, leading to increased latency.
+
+  When looking at the eventual consistency results we can see that despite Firestore in datastore mode having eventual consistency in practice we don’t see any cases where a write isn’t propagated and read immediately. This shows that eventual consistency doesn’t always imply that there will be stale reads and that under normal workloads the latency of replication may be significantly low. 
