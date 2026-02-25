@@ -1,1 +1,59 @@
+This homework implements a simple Node.js service deployed on two GCP virtual machines. The service has four endpoints: /greeting, /register, /list, and /clear. User data is stored in Cloud Firestore in Datastore mode. Two instances in different regions connect to the same firestore database to demonstrate cross and inter region replication and consistency.
+
+File Structure:
+
+index.js(uses provided code from instructions)
+This is the main server wher all the endpoints are defined and connects to Firestore.
+
+package.json & package-lock.json
+Created by npm init to store to store project metadata and dependencies.
+
+script.js
+A client side script used to test average latency and eventual consistency for part 4 of the assignment.
+
+Endpoints
+
+GET /greeting
+Returns a "Hello World!" response.
+
+POST /register
+Accepts JSON input in the form: {"username": "username"}
+
+And creates or updates a Datastore entity for that username
+
+GET /list
+Queries all entities of kind User and returns them in a list of users
+
+POST /clear
+Deletes all User entities from the database.
+
+Analysis Script (script.js)
+
+Script.js performs two experiments:
+
+Average Latency Measurement
+
+It first Sends 10 /register endpoint requests to each instance and records the response times.
+Then it Sends 10 /list endpoint requests to each instance and records the response times before 
+computing the average latency for each endpoint on both instances 1 and 2.
+
+Eventual Consistency Measurement
+
+It Runs 100 iterations and during each iteration it registers a new user on Instance A and then immediately calls /list on Instance B.
+It then checks whether the new username appears in the response and counts how many times the username was not found immediately.
+
+Deployment
+
+Two virtual machines were created:
+
+Instance 1: Region: us-central1
+
+Instance 2: Region: europe-west1
+
+Both machines have firewall rules allowing TCP traffic on port 8080
+
+Database
+
+Cloud Firestore was enabled in Datastore mode in region us-central1.
+Both instances use the same GCP project and connect to the same Firestore database.
 
